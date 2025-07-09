@@ -77,8 +77,8 @@ export function AuthForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">NGAF Notes</CardTitle>
-        <CardDescription>Organize Dubu Pictures</CardDescription>
+        <CardTitle className="text-2xl font-bold">Visual Notes</CardTitle>
+        <CardDescription>Organize and annotate your images</CardDescription>
       </CardHeader>
       <CardContent>
         {message && (

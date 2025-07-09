@@ -41,7 +41,7 @@ export function ImageDetail({ image, onUpdateNotes, getImageUrl }: ImageDetailPr
               alt={image.name}
               fill
               className="object-contain bg-gray-50"
-              onError={(e) => {
+              onError={() => {
                 console.error("Failed to load image:", image.file_path)
               }}
               onLoad={() => {

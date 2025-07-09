@@ -41,9 +41,8 @@ export function ImageGallery({ images, onImageSelect, onImageDelete, getImageUrl
                 alt={image.name}
                 fill
                 className="object-cover"
-                onError={(e) => {
+                onError={() => {
                   console.error("Failed to load image:", image.file_path)
-                  // You could set a fallback image here
                 }}
                 onLoad={() => {
                   console.log("Image loaded successfully:", image.file_path)
