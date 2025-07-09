@@ -36,7 +36,19 @@ export function ImageGallery({ images, onImageSelect, onImageDelete, getImageUrl
         >
           <CardContent className="p-0">
             <div className="aspect-square relative" onClick={() => onImageSelect(image)}>
-              <NextImage src={getImageUrl(image.file_path)} alt={image.name} fill className="object-cover" />
+              <NextImage
+                src={getImageUrl(image.file_path)}
+                alt={image.name}
+                fill
+                className="object-cover"
+                onError={(e) => {
+                  console.error("Failed to load image:", image.file_path)
+                  // You could set a fallback image here
+                }}
+                onLoad={() => {
+                  console.log("Image loaded successfully:", image.file_path)
+                }}
+              />
 
               {/* Delete button */}
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">

@@ -36,7 +36,18 @@ export function ImageDetail({ image, onUpdateNotes, getImageUrl }: ImageDetailPr
       <Card>
         <CardContent className="p-0">
           <div className="aspect-square relative">
-            <NextImage src={getImageUrl(image.file_path)} alt={image.name} fill className="object-contain bg-gray-50" />
+            <NextImage
+              src={getImageUrl(image.file_path)}
+              alt={image.name}
+              fill
+              className="object-contain bg-gray-50"
+              onError={(e) => {
+                console.error("Failed to load image:", image.file_path)
+              }}
+              onLoad={() => {
+                console.log("Image loaded successfully:", image.file_path)
+              }}
+            />
           </div>
         </CardContent>
       </Card>

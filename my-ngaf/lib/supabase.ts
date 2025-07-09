@@ -6,6 +6,12 @@ const supabaseAnonKey =
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+// Helper function to get image URL
+export const getImageUrl = (filePath: string) => {
+  const { data } = supabase.storage.from("images").getPublicUrl(filePath)
+  return data.publicUrl
+}
+
 export type Database = {
   public: {
     Tables: {

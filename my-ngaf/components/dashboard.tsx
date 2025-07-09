@@ -208,42 +208,58 @@ export function Dashboard({ user }: DashboardProps) {
   const handleUploadImage = async (file: File) => {
     if (!selectedFolder) return
 
-    const fileExt = file.name.split(".").pop()
-    const fileName = `${user.id}/${selectedFolder.id}/${Date.now()}.${fileExt}`
+    try {
+      const fileExt = file.name.split(".").pop()
+      const fileName = `${user.id}/${selectedFolder.id}/${Date.now()}.${fileExt}`
 
-    // Upload file to Supabase Storage
-    const { error: uploadError } = await supabase.storage.from("images").upload(fileName, file)
+      console.log("Uploading file:", fileName)
 
-    if (uploadError) {
-      console.error("Error uploading file:", uploadError)
-      return
+      // Upload file to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage.from("images").upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false,
+      })
+
+      if (uploadError) {
+        console.error("Error uploading file:", uploadError)
+        alert("Failed to upload image: " + uploadError.message)
+        return
+      }
+
+      console.log("Upload successful:", uploadData)
+
+      // Save image record to database
+      const { data, error } = await supabase
+        .from("images")
+        .insert([
+          {
+            name: file.name,
+            file_path: fileName,
+            folder_id: selectedFolder.id,
+            user_id: user.id,
+            notes: null,
+          },
+        ])
+        .select()
+        .single()
+
+      if (error) {
+        console.error("Error saving image record:", error)
+        alert("Failed to save image record: " + error.message)
+        return
+      }
+
+      console.log("Image record saved:", data)
+
+      setImages([data, ...images])
+      setShowUploadImage(false)
+
+      // Update folder image count
+      setFolders(folders.map((f) => (f.id === selectedFolder.id ? { ...f, imageCount: f.imageCount + 1 } : f)))
+    } catch (error) {
+      console.error("Unexpected error:", error)
+      alert("An unexpected error occurred while uploading the image")
     }
-
-    // Save image record to database
-    const { data, error } = await supabase
-      .from("images")
-      .insert([
-        {
-          name: file.name,
-          file_path: fileName,
-          folder_id: selectedFolder.id,
-          user_id: user.id,
-          notes: null,
-        },
-      ])
-      .select()
-      .single()
-
-    if (error) {
-      console.error("Error saving image record:", error)
-      return
-    }
-
-    setImages([data, ...images])
-    setShowUploadImage(false)
-
-    // Update folder image count
-    setFolders(folders.map((f) => (f.id === selectedFolder.id ? { ...f, imageCount: f.imageCount + 1 } : f)))
   }
 
   const handleUpdateNotes = async (imageId: string, notes: string) => {
