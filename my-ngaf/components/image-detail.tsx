@@ -41,12 +41,17 @@ export function ImageDetail({ image, onUpdateNotes, getImageUrl }: ImageDetailPr
               alt={image.name}
               fill
               className="object-contain bg-gray-50"
-              onError={() => {
+              onError={(e) => {
                 console.error("Failed to load image:", image.file_path)
+                console.error("Image URL:", getImageUrl(image.file_path))
+                // Set a fallback image
+                e.currentTarget.src = "/placeholder.svg?height=400&width=400"
               }}
               onLoad={() => {
                 console.log("Image loaded successfully:", image.file_path)
               }}
+              unoptimized={true}
+              priority={false}
             />
           </div>
         </CardContent>

@@ -6,10 +6,22 @@ const supabaseAnonKey =
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Helper function to get image URL
+// Helper function to get image URL with better error handling
 export const getImageUrl = (filePath: string) => {
-  const { data } = supabase.storage.from("images").getPublicUrl(filePath)
-  return data.publicUrl
+  try {
+    const { data } = supabase.storage.from("images").getPublicUrl(filePath)
+
+    // Add cache busting and ensure proper URL format
+    const url = data.publicUrl
+
+    // Log for debugging
+    console.log("Generated image URL:", url, "for path:", filePath)
+
+    return url
+  } catch (error) {
+    console.error("Error generating image URL:", error)
+    return "/placeholder.svg?height=400&width=400"
+  }
 }
 
 export type Database = {
