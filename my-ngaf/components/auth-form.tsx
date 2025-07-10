@@ -77,7 +77,7 @@ export function AuthForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">MindBox</CardTitle>
+        <CardTitle className="text-2xl font-bold">MemoBox</CardTitle>
         <CardDescription>Organize and annotate your images</CardDescription>
       </CardHeader>
       <CardContent>
