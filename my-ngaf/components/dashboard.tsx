@@ -317,7 +317,7 @@ export function Dashboard({ user }: DashboardProps) {
             <div>
               <h1 className="text-xl font-semibold text-gray-900">
                 {currentView === "folders"
-                  ? "Visual Notes"
+                  ? "MemoBox"
                   : currentView === "images"
                     ? selectedFolder?.name
                     : selectedImage?.name}
